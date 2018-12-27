@@ -1,10 +1,16 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :update, :destroy]
+  # before_action :set_post, only: [:show, :update, :destroy]
+
+  def background
+    PostJob.perform_async
+    @posts = Post.all
+    render json: @posts
+  end
 
   # GET /posts
   def index
+    PostJob.perform_async
     @posts = Post.all
-
     render json: @posts
   end
 
